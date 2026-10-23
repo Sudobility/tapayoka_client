@@ -1,12 +1,12 @@
 {
   "name": "@sudobility/tapayoka_client",
-  "version": "0.0.60",
+  "version": "0.0.61",
   "description": "React client library for Tapayoka API with TanStack Query hooks",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "files": [
     "dist/**/*"
@@ -32,15 +32,15 @@
   "author": "Sudobility",
   "license": "BUSL-1.1",
   "peerDependencies": {
-    "@sudobility/tapayoka_types": "^0.0.54",
-    "@sudobility/types": "^1.9.68",
+    "@sudobility/tapayoka_types": "^0.0.55",
+    "@sudobility/types": "^1.9.72",
     "@tanstack/react-query": ">=5.0.0",
     "react": ">=18.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
-    "@sudobility/tapayoka_types": "^0.0.54",
-    "@sudobility/types": "^1.9.68",
+    "@sudobility/tapayoka_types": "^0.0.55",
+    "@sudobility/types": "^1.9.72",
     "@tanstack/react-query": "^5.90.5",
     "@types/react": "^19.2.2",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
@@ -55,6 +55,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnqh/tapayoka_client.git"
+    "url": "https://github.com/Sudobility/tapayoka_client.git"
   }
 }
