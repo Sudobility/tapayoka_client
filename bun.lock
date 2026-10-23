@@ -6,8 +6,8 @@
       "name": "@sudobility/tapayoka_client",
       "devDependencies": {
         "@eslint/js": "^9.39.2",
-        "@sudobility/tapayoka_types": "^0.0.54",
-        "@sudobility/types": "^1.9.68",
+        "@sudobility/tapayoka_types": "^0.0.56",
+        "@sudobility/types": "^1.9.74",
         "@tanstack/react-query": "^5.90.5",
         "@types/react": "^19.2.2",
         "@typescript-eslint/eslint-plugin": "^8.50.0",
@@ -21,8 +21,8 @@
         "vitest": "^4.0.4",
       },
       "peerDependencies": {
-        "@sudobility/tapayoka_types": "^0.0.54",
-        "@sudobility/types": "^1.9.68",
+        "@sudobility/tapayoka_types": "^0.0.56",
+        "@sudobility/types": "^1.9.74",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
       },
@@ -163,9 +163,9 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.54", "", { "peerDependencies": { "@sudobility/types": "^1.9.68" } }, "sha512-PMfvuYRkglkBvRCRMgHhH7pXAk2SyRXVUGmpZd3EV0BOGaA+FYhQ93u09QZiJMsSknrPhUYv+12g1358iXCWpQ=="],
+    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.56", "https://npm.pkg.github.com/download/@sudobility/tapayoka_types/0.0.56/c52eeb944e8738ca28ebcc6e66a20ff7e8a7c68c", { "peerDependencies": { "@sudobility/types": "^1.9.74" } }, "sha512-hg2fCyk8PlqupEpSHMrcCASfaqBctoc7/Bk2NNgBQEroNoTLu38TnxMXXRFDZwv9+VaMLpEDU2MbpYNPccAbfQ=="],
 
-    "@sudobility/types": ["@sudobility/types@1.9.68", "", {}, "sha512-4LL5+UfcqQcc0PKKR/z/PqS6j9DQPVkkjL+3oOW+Bwx0TAu1SVKAlPhlt/9ruNMW+abcHuZoFvbOVD5gdYBSGw=="],
+    "@sudobility/types": ["@sudobility/types@1.9.74", "https://npm.pkg.github.com/download/@sudobility/types/1.9.74/f9ad864ba5d8d1097e7e48378ebee8aa7e129e88", {}, "sha512-jgt0F1r71qjFNiRNn/1YlL4JU65sjnzYd8Sfi+Y9z62Lu9VhIXeqWAH12u7/hmGPZqG3nxzn0V+s3sFkB1qWuQ=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.90.20", "", {}, "sha512-OMD2HLpNouXEfZJWcKeVKUgQ5n+n3A2JFmBaScpNDUqSrQSjiveC7dKMe53uJUg1nDG16ttFPz2xfilz6i2uVg=="],
 
