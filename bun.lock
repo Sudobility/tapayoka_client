@@ -6,7 +6,7 @@
       "name": "@sudobility/tapayoka_client",
       "devDependencies": {
         "@eslint/js": "~9.39.5",
-        "@sudobility/tapayoka_types": "^0.0.59",
+        "@sudobility/tapayoka_types": "^0.0.60",
         "@sudobility/types": "^1.9.76",
         "@tanstack/react-query": "~5.104.5",
         "@types/react": "~19.3.0",
@@ -21,7 +21,7 @@
         "vitest": "~4.1.12",
       },
       "peerDependencies": {
-        "@sudobility/tapayoka_types": "^0.0.59",
+        "@sudobility/tapayoka_types": "^0.0.60",
         "@sudobility/types": "^1.9.76",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
@@ -99,7 +99,7 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.59", "https://npm.pkg.github.com/download/@sudobility/tapayoka_types/0.0.59/608ef04e53d4d48c2013f763cd4ea26c8d82f6cf", { "peerDependencies": { "@sudobility/types": "^1.9.76" } }, "sha512-IN/kjSQZR+AiDcRCfyhduRxHyW5PsxDXCP7lC379wzRgFFtHSEjfSV80gv6aUXIXIj3oh+krPkxkezjzj7Kg+A=="],
+    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.60", "https://npm.pkg.github.com/download/@sudobility/tapayoka_types/0.0.60/7bc056a7ac5d60ccc0e4e80bb3917deb3726b075", { "peerDependencies": { "@sudobility/types": "^1.9.76" } }, "sha512-ka9CvFg9YXZ+Dj9TQpoWCcZVeHA5CPkwKjD21SsD8WhXF2Znho9epP42LvdO3eMMMqrnMFeWvhvdFTyURRnNvQ=="],
 
     "@sudobility/types": ["@sudobility/types@1.9.76", "https://npm.pkg.github.com/download/@sudobility/types/1.9.76/71635156f72fd9461107d5f147b3dc1c49f863d0", {}, "sha512-b7maZHR5wM84VlQ+l9R+2guzSOrExog6OUNy1oCe7h0abW13syycmnLQL0g+qql0aQ84qTB4A0mJelhY3Vef4Q=="],
 
@@ -245,7 +245,7 @@
 
     "has-flag": ["has-flag@4.0.0", "", {}, "sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ=="],
 
-    "ignore": ["ignore@7.0.13", "", {}, "sha512-2E8Q6rh+1RRSq/YdaGsNfXsEZy9FVqv6BSSrkmZJP7BnaoPnRfKL+YaofPvP+5rzdk144qSm6i4+hvPgUcbV4Q=="],
+    "ignore": ["ignore@7.0.14", "", {}, "sha512-wCBiZ77u1tuWde6G/nfOtLaCTYcFDU5yCzARzK10y+rLhzYoL7a7yEemcopcc2Mzow7gZOIjnV2ym1NYmdiJOQ=="],
 
     "import-fresh": ["import-fresh@3.3.1", "", { "dependencies": { "parent-module": "^1.0.0", "resolve-from": "^4.0.0" } }, "sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ=="],
 
