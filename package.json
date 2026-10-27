@@ -1,6 +1,6 @@
 {
   "name": "@sudobility/tapayoka_client",
-  "version": "0.0.67",
+  "version": "0.0.68",
   "description": "React client library for Tapayoka API with TanStack Query hooks",
   "type": "module",
   "main": "dist/index.js",
