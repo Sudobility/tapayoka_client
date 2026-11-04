@@ -1,6 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { NetworkClient } from '@sudobility/types';
-import type { VendorDevice } from '@sudobility/tapayoka_types';
+import type {
+  VendorDevice,
+  VendorDeviceUpdateRequest,
+} from '@sudobility/tapayoka_types';
 import { TapayokaClient } from '../network/TapayokaClient';
 import type { FirebaseIdToken } from '../types';
 
@@ -9,6 +12,10 @@ export interface UseVendorAllDevicesReturn {
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
+  updateDevice: (
+    walletAddress: string,
+    data: VendorDeviceUpdateRequest
+  ) => Promise<VendorDevice | null>;
   deleteDevice: (walletAddress: string) => Promise<boolean>;
   clearError: () => void;
 }
@@ -48,6 +55,42 @@ export const useVendorAllDevices = (
     }
   }, [token, entitySlug, enabled]);
 
+  const updateDevice = useCallback(
+    async (
+      walletAddress: string,
+      data: VendorDeviceUpdateRequest
+    ): Promise<VendorDevice | null> => {
+      if (!token || !entitySlug) return null;
+      try {
+        setError(null);
+        const response = await client.updateVendorDevice(
+          entitySlug,
+          walletAddress,
+          data,
+          token
+        );
+        const updated = response.data ?? null;
+        if (updated) {
+          // The update endpoint returns the core row (no location/model/offering
+          // enrichment); merge over the existing entry so the flat list keeps
+          // its display fields.
+          setDevices(prev =>
+            prev.map(d =>
+              d.walletAddress === walletAddress ? { ...d, ...updated } : d
+            )
+          );
+        }
+        return updated;
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error ? err.message : 'Failed to update device';
+        setError(message);
+        throw err;
+      }
+    },
+    [token, entitySlug]
+  );
+
   const deleteDevice = useCallback(
     async (walletAddress: string): Promise<boolean> => {
       if (!token || !entitySlug) return false;
@@ -72,5 +115,13 @@ export const useVendorAllDevices = (
     refresh();
   }, [refresh]);
 
-  return { devices, isLoading, error, refresh, deleteDevice, clearError };
+  return {
+    devices,
+    isLoading,
+    error,
+    refresh,
+    updateDevice,
+    deleteDevice,
+    clearError,
+  };
 };
