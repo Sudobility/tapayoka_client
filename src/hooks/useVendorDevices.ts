@@ -1,38 +1,40 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { NetworkClient } from '@sudobility/types';
 import type {
-  VendorInstallation,
-  VendorInstallationCreateRequest,
-  VendorInstallationUpdateRequest,
+  VendorDevice,
+  VendorDeviceLookup,
+  VendorDeviceCreateRequest,
+  VendorDeviceUpdateRequest,
 } from '@sudobility/tapayoka_types';
 import { TapayokaClient } from '../network/TapayokaClient';
 import type { FirebaseIdToken } from '../types';
 
-export interface UseVendorInstallationsReturn {
-  installations: VendorInstallation[];
+export interface UseVendorDevicesReturn {
+  devices: VendorDevice[];
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
-  createInstallation: (
-    data: VendorInstallationCreateRequest
-  ) => Promise<VendorInstallation | null>;
-  updateInstallation: (
+  createDevice: (
+    data: VendorDeviceCreateRequest
+  ) => Promise<VendorDevice | null>;
+  updateDevice: (
     walletAddress: string,
-    data: VendorInstallationUpdateRequest
-  ) => Promise<VendorInstallation | null>;
-  deleteInstallation: (walletAddress: string) => Promise<boolean>;
+    data: VendorDeviceUpdateRequest
+  ) => Promise<VendorDevice | null>;
+  deleteDevice: (walletAddress: string) => Promise<boolean>;
+  lookupDevice: (walletAddress: string) => Promise<VendorDeviceLookup | null>;
   clearError: () => void;
 }
 
-export const useVendorInstallations = (
+export const useVendorDevices = (
   networkClient: NetworkClient,
   baseUrl: string,
   entitySlug: string | null,
   token: FirebaseIdToken | null,
   serviceId: string | null,
   options?: { enabled?: boolean }
-): UseVendorInstallationsReturn => {
-  const [installations, setInstallations] = useState<VendorInstallation[]>([]);
+): UseVendorDevicesReturn => {
+  const [devices, setDevices] = useState<VendorDevice[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,39 +47,35 @@ export const useVendorInstallations = (
     try {
       setIsLoading(true);
       setError(null);
-      const response = await client.getVendorInstallations(
+      const response = await client.getVendorDevices(
         entitySlug!,
         serviceId,
         token
       );
-      setInstallations(response.data ?? []);
+      setDevices(response.data ?? []);
     } catch (err: unknown) {
-      setError(
-        err instanceof Error ? err.message : 'Failed to load installations'
-      );
+      setError(err instanceof Error ? err.message : 'Failed to load devices');
     } finally {
       setIsLoading(false);
     }
   }, [token, entitySlug, enabled, serviceId]);
 
-  const createInstallation = useCallback(
-    async (
-      data: VendorInstallationCreateRequest
-    ): Promise<VendorInstallation | null> => {
+  const createDevice = useCallback(
+    async (data: VendorDeviceCreateRequest): Promise<VendorDevice | null> => {
       if (!token) return null;
       try {
         setError(null);
-        const response = await client.createVendorInstallation(
+        const response = await client.createVendorDevice(
           entitySlug!,
           data,
           token
         );
-        const installation = response.data ?? null;
-        if (installation) setInstallations(prev => [...prev, installation]);
-        return installation;
+        const device = response.data ?? null;
+        if (device) setDevices(prev => [...prev, device]);
+        return device;
       } catch (err: unknown) {
         const message =
-          err instanceof Error ? err.message : 'Failed to create installation';
+          err instanceof Error ? err.message : 'Failed to create device';
         setError(message);
         throw err;
       }
@@ -85,15 +83,15 @@ export const useVendorInstallations = (
     [token, entitySlug]
   );
 
-  const updateInstallation = useCallback(
+  const updateDevice = useCallback(
     async (
       walletAddress: string,
-      data: VendorInstallationUpdateRequest
-    ): Promise<VendorInstallation | null> => {
+      data: VendorDeviceUpdateRequest
+    ): Promise<VendorDevice | null> => {
       if (!token) return null;
       try {
         setError(null);
-        const response = await client.updateVendorInstallation(
+        const response = await client.updateVendorDevice(
           entitySlug!,
           walletAddress,
           data,
@@ -101,13 +99,13 @@ export const useVendorInstallations = (
         );
         const updated = response.data ?? null;
         if (updated)
-          setInstallations(prev =>
+          setDevices(prev =>
             prev.map(e => (e.walletAddress === walletAddress ? updated : e))
           );
         return updated;
       } catch (err: unknown) {
         const message =
-          err instanceof Error ? err.message : 'Failed to update installation';
+          err instanceof Error ? err.message : 'Failed to update device';
         setError(message);
         throw err;
       }
@@ -115,23 +113,40 @@ export const useVendorInstallations = (
     [token, entitySlug]
   );
 
-  const deleteInstallation = useCallback(
+  const deleteDevice = useCallback(
     async (walletAddress: string): Promise<boolean> => {
       if (!token) return false;
       try {
         setError(null);
-        await client.deleteVendorInstallation(
-          entitySlug!,
-          walletAddress,
-          token
-        );
-        setInstallations(prev =>
-          prev.filter(e => e.walletAddress !== walletAddress)
-        );
+        await client.deleteVendorDevice(entitySlug!, walletAddress, token);
+        setDevices(prev => prev.filter(e => e.walletAddress !== walletAddress));
         return true;
       } catch (err: unknown) {
         const message =
-          err instanceof Error ? err.message : 'Failed to delete installation';
+          err instanceof Error ? err.message : 'Failed to delete device';
+        setError(message);
+        throw err;
+      }
+    },
+    [token, entitySlug]
+  );
+
+  const lookupDevice = useCallback(
+    async (walletAddress: string): Promise<VendorDeviceLookup | null> => {
+      // Imperative one-shot check; independent of the list's enabled-gating
+      // (callers may not have a serviceId), only needs token + entitySlug.
+      if (!token || !entitySlug) return null;
+      try {
+        setError(null);
+        const response = await client.lookupVendorDevice(
+          entitySlug,
+          walletAddress,
+          token
+        );
+        return response.data ?? null;
+      } catch (err: unknown) {
+        const message =
+          err instanceof Error ? err.message : 'Failed to look up device';
         setError(message);
         throw err;
       }
@@ -146,13 +161,14 @@ export const useVendorInstallations = (
   }, [refresh]);
 
   return {
-    installations,
+    devices,
     isLoading,
     error,
     refresh,
-    createInstallation,
-    updateInstallation,
-    deleteInstallation,
+    createDevice,
+    updateDevice,
+    deleteDevice,
+    lookupDevice,
     clearError,
   };
 };

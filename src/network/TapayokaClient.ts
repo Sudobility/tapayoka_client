@@ -16,19 +16,20 @@ import type {
   VendorLocation,
   VendorModel,
   VendorOffering,
-  VendorInstallation,
+  VendorDevice,
+  VendorDeviceLookup,
   VendorLocationCreateRequest,
   VendorLocationUpdateRequest,
   VendorModelCreateRequest,
   VendorModelUpdateRequest,
   VendorOfferingCreateRequest,
   VendorOfferingUpdateRequest,
-  VendorInstallationCreateRequest,
-  VendorInstallationUpdateRequest,
-  VendorInstallationSlot,
-  VendorInstallationSlotCreateRequest,
-  VendorInstallationSlotUpdateRequest,
-  VendorInstallationSlotBulkCreateRequest,
+  VendorDeviceCreateRequest,
+  VendorDeviceUpdateRequest,
+  VendorDeviceSlot,
+  VendorDeviceSlotCreateRequest,
+  VendorDeviceSlotUpdateRequest,
+  VendorDeviceSlotBulkCreateRequest,
   UserProfile,
   Entity,
   DeviceLog,
@@ -658,203 +659,228 @@ export class TapayokaClient {
   }
 
   // =========================================================================
-  // Vendor: Installations
+  // Vendor: Devices
   // =========================================================================
 
-  async getVendorInstallations(
+  async getVendorDevices(
     entitySlug: string,
     serviceId: string,
     token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallation[]>> {
+  ): Promise<BaseResponse<VendorDevice[]>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.get<BaseResponse<VendorDevice[]>>(
+      this.entityUrl(entitySlug, `devices/service/${serviceId}`),
+      {
+        headers,
+      }
+    );
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'get vendor devices');
+    }
+    return response.data;
+  }
+
+  /** Org-wide device list (every device in the entity), enriched with
+   *  location/model/offering names for a flat list view. */
+  async getAllVendorDevices(
+    entitySlug: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDevice[]>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.get<BaseResponse<VendorDevice[]>>(
+      this.entityUrl(entitySlug, 'devices'),
+      {
+        headers,
+      }
+    );
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'get all vendor devices');
+    }
+    return response.data;
+  }
+
+  async lookupVendorDevice(
+    entitySlug: string,
+    walletAddress: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDeviceLookup>> {
     const headers = createAuthHeaders(token);
     const response = await this.networkClient.get<
-      BaseResponse<VendorInstallation[]>
-    >(this.entityUrl(entitySlug, `installations/service/${serviceId}`), {
+      BaseResponse<VendorDeviceLookup>
+    >(this.entityUrl(entitySlug, `devices/lookup/${walletAddress}`), {
       headers,
     });
     if (!response.ok || !response.data) {
-      throw handleApiError(response, 'get vendor installations');
+      throw handleApiError(response, 'look up vendor device');
     }
     return response.data;
   }
 
-  async createVendorInstallation(
+  async createVendorDevice(
     entitySlug: string,
-    data: VendorInstallationCreateRequest,
+    data: VendorDeviceCreateRequest,
     token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallation>> {
+  ): Promise<BaseResponse<VendorDevice>> {
     const headers = createAuthHeaders(token);
-    const response = await this.networkClient.post<
-      BaseResponse<VendorInstallation>
-    >(this.entityUrl(entitySlug, 'installations'), data, { headers });
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'create vendor installation');
-    }
-    return response.data;
-  }
-
-  async updateVendorInstallation(
-    entitySlug: string,
-    walletAddress: string,
-    data: VendorInstallationUpdateRequest,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallation>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.put<
-      BaseResponse<VendorInstallation>
-    >(this.entityUrl(entitySlug, `installations/${walletAddress}`), data, {
-      headers,
-    });
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'update vendor installation');
-    }
-    return response.data;
-  }
-
-  async deleteVendorInstallation(
-    entitySlug: string,
-    walletAddress: string,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<DeleteResult>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.delete<
-      BaseResponse<DeleteResult>
-    >(this.entityUrl(entitySlug, `installations/${walletAddress}`), {
-      headers,
-    });
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'delete vendor installation');
-    }
-    return response.data;
-  }
-
-  // =========================================================================
-  // Vendor: Installation Slots
-  // =========================================================================
-
-  async getVendorInstallationSlots(
-    entitySlug: string,
-    walletAddress: string,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallationSlot[]>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.get<
-      BaseResponse<VendorInstallationSlot[]>
-    >(
-      this.entityUrl(
-        entitySlug,
-        `installation-slots/installation/${walletAddress}`
-      ),
-      {
-        headers,
-      }
-    );
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'get vendor installation slots');
-    }
-    return response.data;
-  }
-
-  async createVendorInstallationSlot(
-    entitySlug: string,
-    walletAddress: string,
-    data: VendorInstallationSlotCreateRequest,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallationSlot>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.post<
-      BaseResponse<VendorInstallationSlot>
-    >(
-      this.entityUrl(
-        entitySlug,
-        `installation-slots/installation/${walletAddress}`
-      ),
+    const response = await this.networkClient.post<BaseResponse<VendorDevice>>(
+      this.entityUrl(entitySlug, 'devices'),
       data,
-      {
-        headers,
-      }
-    );
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'create vendor installation slot');
-    }
-    return response.data;
-  }
-
-  async bulkCreateVendorInstallationSlots(
-    entitySlug: string,
-    walletAddress: string,
-    data: VendorInstallationSlotBulkCreateRequest,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallationSlot[]>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.post<
-      BaseResponse<VendorInstallationSlot[]>
-    >(
-      this.entityUrl(
-        entitySlug,
-        `installation-slots/installation/${walletAddress}/bulk`
-      ),
-      data,
-      {
-        headers,
-      }
-    );
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'bulk create vendor installation slots');
-    }
-    return response.data;
-  }
-
-  async updateVendorInstallationSlot(
-    entitySlug: string,
-    slotId: string,
-    data: VendorInstallationSlotUpdateRequest,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<VendorInstallationSlot>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.put<
-      BaseResponse<VendorInstallationSlot>
-    >(this.entityUrl(entitySlug, `installation-slots/${slotId}`), data, {
-      headers,
-    });
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'update vendor installation slot');
-    }
-    return response.data;
-  }
-
-  async deleteVendorInstallationSlot(
-    entitySlug: string,
-    slotId: string,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<DeleteResult>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.delete<
-      BaseResponse<DeleteResult>
-    >(this.entityUrl(entitySlug, `installation-slots/${slotId}`), { headers });
-    if (!response.ok || !response.data) {
-      throw handleApiError(response, 'delete vendor installation slot');
-    }
-    return response.data;
-  }
-
-  async deleteAllVendorInstallationSlots(
-    entitySlug: string,
-    walletAddress: string,
-    token: FirebaseIdToken
-  ): Promise<BaseResponse<DeleteResult>> {
-    const headers = createAuthHeaders(token);
-    const response = await this.networkClient.delete<
-      BaseResponse<DeleteResult>
-    >(
-      this.entityUrl(
-        entitySlug,
-        `installation-slots/installation/${walletAddress}`
-      ),
       { headers }
     );
     if (!response.ok || !response.data) {
-      throw handleApiError(response, 'delete all vendor installation slots');
+      throw handleApiError(response, 'create vendor device');
+    }
+    return response.data;
+  }
+
+  async updateVendorDevice(
+    entitySlug: string,
+    walletAddress: string,
+    data: VendorDeviceUpdateRequest,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDevice>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.put<BaseResponse<VendorDevice>>(
+      this.entityUrl(entitySlug, `devices/${walletAddress}`),
+      data,
+      {
+        headers,
+      }
+    );
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'update vendor device');
+    }
+    return response.data;
+  }
+
+  async deleteVendorDevice(
+    entitySlug: string,
+    walletAddress: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<DeleteResult>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.delete<
+      BaseResponse<DeleteResult>
+    >(this.entityUrl(entitySlug, `devices/${walletAddress}`), {
+      headers,
+    });
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'delete vendor device');
+    }
+    return response.data;
+  }
+
+  // =========================================================================
+  // Vendor: Device Slots
+  // =========================================================================
+
+  async getVendorDeviceSlots(
+    entitySlug: string,
+    walletAddress: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDeviceSlot[]>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.get<
+      BaseResponse<VendorDeviceSlot[]>
+    >(this.entityUrl(entitySlug, `device-slots/device/${walletAddress}`), {
+      headers,
+    });
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'get vendor device slots');
+    }
+    return response.data;
+  }
+
+  async createVendorDeviceSlot(
+    entitySlug: string,
+    walletAddress: string,
+    data: VendorDeviceSlotCreateRequest,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDeviceSlot>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.post<
+      BaseResponse<VendorDeviceSlot>
+    >(
+      this.entityUrl(entitySlug, `device-slots/device/${walletAddress}`),
+      data,
+      {
+        headers,
+      }
+    );
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'create vendor device slot');
+    }
+    return response.data;
+  }
+
+  async bulkCreateVendorDeviceSlots(
+    entitySlug: string,
+    walletAddress: string,
+    data: VendorDeviceSlotBulkCreateRequest,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDeviceSlot[]>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.post<
+      BaseResponse<VendorDeviceSlot[]>
+    >(
+      this.entityUrl(entitySlug, `device-slots/device/${walletAddress}/bulk`),
+      data,
+      {
+        headers,
+      }
+    );
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'bulk create vendor device slots');
+    }
+    return response.data;
+  }
+
+  async updateVendorDeviceSlot(
+    entitySlug: string,
+    slotId: string,
+    data: VendorDeviceSlotUpdateRequest,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<VendorDeviceSlot>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.put<
+      BaseResponse<VendorDeviceSlot>
+    >(this.entityUrl(entitySlug, `device-slots/${slotId}`), data, {
+      headers,
+    });
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'update vendor device slot');
+    }
+    return response.data;
+  }
+
+  async deleteVendorDeviceSlot(
+    entitySlug: string,
+    slotId: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<DeleteResult>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.delete<
+      BaseResponse<DeleteResult>
+    >(this.entityUrl(entitySlug, `device-slots/${slotId}`), { headers });
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'delete vendor device slot');
+    }
+    return response.data;
+  }
+
+  async deleteAllVendorDeviceSlots(
+    entitySlug: string,
+    walletAddress: string,
+    token: FirebaseIdToken
+  ): Promise<BaseResponse<DeleteResult>> {
+    const headers = createAuthHeaders(token);
+    const response = await this.networkClient.delete<
+      BaseResponse<DeleteResult>
+    >(this.entityUrl(entitySlug, `device-slots/device/${walletAddress}`), {
+      headers,
+    });
+    if (!response.ok || !response.data) {
+      throw handleApiError(response, 'delete all vendor device slots');
     }
     return response.data;
   }

@@ -15,5 +15,5 @@ export const QUERY_KEYS = {
   VENDOR_MODEL: 'tapayoka-vendor-model',
   VENDOR_OFFERINGS: 'tapayoka-vendor-offerings',
   VENDOR_OFFERING: 'tapayoka-vendor-offering',
-  VENDOR_INSTALLATIONS: 'tapayoka-vendor-installations',
+  VENDOR_DEVICES: 'tapayoka-vendor-devices',
 } as const;

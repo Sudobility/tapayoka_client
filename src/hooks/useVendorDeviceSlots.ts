@@ -1,43 +1,43 @@
 import { useState, useCallback, useEffect } from 'react';
 import type { NetworkClient } from '@sudobility/types';
 import type {
-  VendorInstallationSlot,
-  VendorInstallationSlotCreateRequest,
-  VendorInstallationSlotUpdateRequest,
-  VendorInstallationSlotBulkCreateRequest,
+  VendorDeviceSlot,
+  VendorDeviceSlotCreateRequest,
+  VendorDeviceSlotUpdateRequest,
+  VendorDeviceSlotBulkCreateRequest,
 } from '@sudobility/tapayoka_types';
 import { TapayokaClient } from '../network/TapayokaClient';
 import type { FirebaseIdToken } from '../types';
 
-export interface UseVendorInstallationSlotsReturn {
-  slots: VendorInstallationSlot[];
+export interface UseVendorDeviceSlotsReturn {
+  slots: VendorDeviceSlot[];
   isLoading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
   createSlot: (
-    data: VendorInstallationSlotCreateRequest
-  ) => Promise<VendorInstallationSlot | null>;
+    data: VendorDeviceSlotCreateRequest
+  ) => Promise<VendorDeviceSlot | null>;
   bulkCreateSlots: (
-    data: VendorInstallationSlotBulkCreateRequest
-  ) => Promise<VendorInstallationSlot[] | null>;
+    data: VendorDeviceSlotBulkCreateRequest
+  ) => Promise<VendorDeviceSlot[] | null>;
   updateSlot: (
     slotId: string,
-    data: VendorInstallationSlotUpdateRequest
-  ) => Promise<VendorInstallationSlot | null>;
+    data: VendorDeviceSlotUpdateRequest
+  ) => Promise<VendorDeviceSlot | null>;
   deleteSlot: (slotId: string) => Promise<boolean>;
   deleteAllSlots: () => Promise<boolean>;
   clearError: () => void;
 }
 
-export const useVendorInstallationSlots = (
+export const useVendorDeviceSlots = (
   networkClient: NetworkClient,
   baseUrl: string,
   entitySlug: string | null,
   token: FirebaseIdToken | null,
-  installationWalletAddress: string | null,
+  deviceWalletAddress: string | null,
   options?: { enabled?: boolean }
-): UseVendorInstallationSlotsReturn => {
-  const [slots, setSlots] = useState<VendorInstallationSlot[]>([]);
+): UseVendorDeviceSlotsReturn => {
+  const [slots, setSlots] = useState<VendorDeviceSlot[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,16 +46,16 @@ export const useVendorInstallationSlots = (
     options?.enabled !== false &&
     !!token &&
     !!entitySlug &&
-    !!installationWalletAddress;
+    !!deviceWalletAddress;
 
   const refresh = useCallback(async () => {
-    if (!enabled || !token || !installationWalletAddress) return;
+    if (!enabled || !token || !deviceWalletAddress) return;
     try {
       setIsLoading(true);
       setError(null);
-      const response = await client.getVendorInstallationSlots(
+      const response = await client.getVendorDeviceSlots(
         entitySlug!,
-        installationWalletAddress,
+        deviceWalletAddress,
         token
       );
       setSlots(response.data ?? []);
@@ -64,18 +64,18 @@ export const useVendorInstallationSlots = (
     } finally {
       setIsLoading(false);
     }
-  }, [token, entitySlug, enabled, installationWalletAddress]);
+  }, [token, entitySlug, enabled, deviceWalletAddress]);
 
   const createSlot = useCallback(
     async (
-      data: VendorInstallationSlotCreateRequest
-    ): Promise<VendorInstallationSlot | null> => {
-      if (!token || !installationWalletAddress) return null;
+      data: VendorDeviceSlotCreateRequest
+    ): Promise<VendorDeviceSlot | null> => {
+      if (!token || !deviceWalletAddress) return null;
       try {
         setError(null);
-        const response = await client.createVendorInstallationSlot(
+        const response = await client.createVendorDeviceSlot(
           entitySlug!,
-          installationWalletAddress,
+          deviceWalletAddress,
           data,
           token
         );
@@ -89,19 +89,19 @@ export const useVendorInstallationSlots = (
         throw err;
       }
     },
-    [token, entitySlug, installationWalletAddress]
+    [token, entitySlug, deviceWalletAddress]
   );
 
   const bulkCreateSlots = useCallback(
     async (
-      data: VendorInstallationSlotBulkCreateRequest
-    ): Promise<VendorInstallationSlot[] | null> => {
-      if (!token || !installationWalletAddress) return null;
+      data: VendorDeviceSlotBulkCreateRequest
+    ): Promise<VendorDeviceSlot[] | null> => {
+      if (!token || !deviceWalletAddress) return null;
       try {
         setError(null);
-        const response = await client.bulkCreateVendorInstallationSlots(
+        const response = await client.bulkCreateVendorDeviceSlots(
           entitySlug!,
-          installationWalletAddress,
+          deviceWalletAddress,
           data,
           token
         );
@@ -115,18 +115,18 @@ export const useVendorInstallationSlots = (
         throw err;
       }
     },
-    [token, entitySlug, installationWalletAddress]
+    [token, entitySlug, deviceWalletAddress]
   );
 
   const updateSlot = useCallback(
     async (
       slotId: string,
-      data: VendorInstallationSlotUpdateRequest
-    ): Promise<VendorInstallationSlot | null> => {
+      data: VendorDeviceSlotUpdateRequest
+    ): Promise<VendorDeviceSlot | null> => {
       if (!token) return null;
       try {
         setError(null);
-        const response = await client.updateVendorInstallationSlot(
+        const response = await client.updateVendorDeviceSlot(
           entitySlug!,
           slotId,
           data,
@@ -151,7 +151,7 @@ export const useVendorInstallationSlots = (
       if (!token) return false;
       try {
         setError(null);
-        await client.deleteVendorInstallationSlot(entitySlug!, slotId, token);
+        await client.deleteVendorDeviceSlot(entitySlug!, slotId, token);
         setSlots(prev => prev.filter(s => s.id !== slotId));
         return true;
       } catch (err: unknown) {
@@ -165,12 +165,12 @@ export const useVendorInstallationSlots = (
   );
 
   const deleteAllSlots = useCallback(async (): Promise<boolean> => {
-    if (!token || !installationWalletAddress) return false;
+    if (!token || !deviceWalletAddress) return false;
     try {
       setError(null);
-      await client.deleteAllVendorInstallationSlots(
+      await client.deleteAllVendorDeviceSlots(
         entitySlug!,
-        installationWalletAddress,
+        deviceWalletAddress,
         token
       );
       setSlots([]);
@@ -181,7 +181,7 @@ export const useVendorInstallationSlots = (
       setError(message);
       throw err;
     }
-  }, [token, entitySlug, installationWalletAddress]);
+  }, [token, entitySlug, deviceWalletAddress]);
 
   const clearError = useCallback(() => setError(null), []);
 
