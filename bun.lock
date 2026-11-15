@@ -6,8 +6,8 @@
       "name": "@sudobility/tapayoka_client",
       "devDependencies": {
         "@eslint/js": "~10.0.1",
-        "@sudobility/tapayoka_types": "^0.0.65",
-        "@sudobility/types": "^1.10.1",
+        "@sudobility/tapayoka_types": "^0.0.66",
+        "@sudobility/types": "^1.10.2",
         "@tanstack/react-query": "~5.104.5",
         "@types/react": "~19.3.0",
         "@typescript-eslint/eslint-plugin": "~8.72.0",
@@ -21,8 +21,8 @@
         "vitest": "~4.1.12",
       },
       "peerDependencies": {
-        "@sudobility/tapayoka_types": "^0.0.65",
-        "@sudobility/types": "^1.10.1",
+        "@sudobility/tapayoka_types": "^0.0.66",
+        "@sudobility/types": "^1.10.2",
         "@tanstack/react-query": ">=5.0.0",
         "react": ">=18.0.0",
       },
@@ -105,9 +105,9 @@
 
     "@standard-schema/spec": ["@standard-schema/spec@1.1.0", "", {}, "sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w=="],
 
-    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.65", "https://npm.pkg.github.com/download/@sudobility/tapayoka_types/0.0.65/d8e3b4deed723c90b78869741a966564e75d2562", { "peerDependencies": { "@sudobility/types": "^1.10.1" } }, "sha512-wUamFsMtJLfT/HyEBcGVBPEpv/YTvjEIMMDbVhr2MKABeOyK1pZ8R1Hg5JCighXfY6zoxNHmm6FwiWZtuFWpig=="],
+    "@sudobility/tapayoka_types": ["@sudobility/tapayoka_types@0.0.66", "https://npm.pkg.github.com/download/@sudobility/tapayoka_types/0.0.66/9f88437774ab62491c31ed43ee7a8cc15440dfdd", { "peerDependencies": { "@sudobility/types": "^1.10.2" } }, "sha512-D5B3FAByLiFXne0MEetPnyTkN858vGBd5wHqOX3JmF7zJVq1wHt6nGuhhs34g3ZVSZQ/0NrMfG7BsOVC7VT70g=="],
 
-    "@sudobility/types": ["@sudobility/types@1.10.1", "https://npm.pkg.github.com/download/@sudobility/types/1.10.1/8e353f55822e0bc3fa9555dfe3aee593e140c012", {}, "sha512-LmJyjDDY5rHDET1wstkT0i59SSOrOXijL2iqrgfcK6VHtKcBEw7FFpbw4CyHn+dhR9kqkYpEydSfypoqw7crMg=="],
+    "@sudobility/types": ["@sudobility/types@1.10.2", "https://npm.pkg.github.com/download/@sudobility/types/1.10.2/c25e0a0122786dbd23651b15aab022c02c3a5a5e", {}, "sha512-CjMjxeoWE+WMt7HWPWFwcjmjXEbwS9ZPnoa6tN8dBzQSWCaCTZBIfjDDk7xwi+9/2OOxVaorDEHNOZTqSdUxvA=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.104.5", "", {}, "sha512-Q94gI8Opd+CbdVNOdj8ZCyV8WqLYitrDq1t96Xc8WZT6lY0r5iRnJLXYDxMex7EEf2v+mXvn4FcjaBKSxXZQ9A=="],
 
